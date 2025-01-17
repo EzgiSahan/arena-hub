@@ -37,8 +37,8 @@ const MatchDetail = () => {
     const filteredPlayers = matchPlayer?.filter((player) => player.match_id === params.id);
     const findRatedPlayers = playerRatings?.filter((player) => player.match_id === params.id && player.rated_by_user_id === session.user.id);
 
-    const team1Players = filteredPlayers?.filter((player) => player.team === 1) || [];
-    const team2Players = filteredPlayers?.filter((player) => player.team === 2) || [];
+    const team1Players = filteredPlayers?.filter((player) => player.team === 1);
+    const team2Players = filteredPlayers?.filter((player) => player.team === 2);
 
     const [ratings, setRatings] = useState({});
     const [editMode, setEditMode] = useState(false);
