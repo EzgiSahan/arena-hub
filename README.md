@@ -25,12 +25,10 @@ This project uses the following environment variables, Please create a .env file
 
 | Name                          | Description                         | Default Value                                  |
 | ----------------------------- | ------------------------------------| -----------------------------------------------|
-|URL                           | Cors accepted values                | "*"                                            |
-|ACCESS_TOKEN_SECRET                           | Generate your Access token secret for your JWT Tokens               | "-"                                            |
-|REFRESH_TOKEN_SECRET                             | Generate your Refresh token secret for your JWT Tokens               | "-"                                            |
-|DB_USER                           | Database postgres username               | "postgres"                                            |
-|DB_USER_PASSWORD                           | Database postgres username                | "postgres"                                            |
-|DB_NAME                           | Name of your database               | "safeRide"                                            |
+|MONGODB_URI                           | Database mongoDB url                | "*"                                            |
+|NEXTAUTH_SECRET                           | Generate your Access token secret for your JWT Tokens               | "-"                                            |
+|JWT_SECRET                             | Generate your Refresh token secret for your JWT Tokens               | "-"                                            |
+|NEXTAUTH_URL                           | local              | "postgres"                                            |
 
 
 ## Learn More
