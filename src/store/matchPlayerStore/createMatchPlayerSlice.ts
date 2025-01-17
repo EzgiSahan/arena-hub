@@ -9,7 +9,7 @@ const initialState = {
 export const createMatchPlayer = createAsyncThunk(
   "createMatchPlayerSlice/createMatchPlayer",
   async (players) => {
-    const response = await fetch("${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

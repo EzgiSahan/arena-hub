@@ -63,7 +63,7 @@ export const updateMatch = createAsyncThunk(
       throw new Error("No valid fields provided for update.");
     }
 
-    const response = await fetch(`http://localhost:3000/api/matches/${matchId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matches/${matchId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const updateMatch = createAsyncThunk(
 export const deleteMatch = createAsyncThunk(
   'createMatchSlice/createMatch',
   async ({matchId}: { matchId: string}) => {
-    const response = await fetch(`http://localhost:3000/api/matches/${matchId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matches/${matchId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
