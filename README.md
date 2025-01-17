@@ -25,10 +25,10 @@ This project uses the following environment variables, Please create a .env file
 
 | Name                          | Description                         | Default Value                                  |
 | ----------------------------- | ------------------------------------| -----------------------------------------------|
-|MONGODB_URI                           | Database mongoDB url                | "*"                                            |
-|NEXTAUTH_SECRET                           | Generate your Access token secret for your JWT Tokens               | "-"                                            |
-|JWT_SECRET                             | Generate your Refresh token secret for your JWT Tokens               | "-"                                            |
-|NEXTAUTH_URL                           | local              | "postgres"                                            |
+|MONGODB_URI                           | MongoDB Atlas connection URI.               | mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com/?authSource=admin&replicaSet=myRepl                                            |
+|NEXTAUTH_SECRET                           | The secret key used for NextAuth authentication.               | default-secret-key                                            |
+|JWT_SECRET                             | The key used to create and verify a JSON Web Token (JWT).               | default-jwt-secret                                            |
+|NEXTAUTH_URL                           | Base URL for NextAuth              | `http://localhost:3000`                                            |
 
 
 ## Learn More
