@@ -18,7 +18,7 @@ export const dividePlayersIntoTeams = createAsyncThunk(
         // Oyuncuların detaylarını ve average_rating'lerini al
         const playerDetails = await Promise.all(
           matchPlayers.map(async (player) => {
-            const userResponse = await fetch(`/api/users/${player.user_id}`);
+            const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${player.user_id}`);
             const data = await userResponse.json();
             return { ...player, average_rating: data.average_rating };
           })
