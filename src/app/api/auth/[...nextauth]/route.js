@@ -18,45 +18,50 @@ const handler =  NextAuth({
         await connectMongoDB();
 
         const user = await Users.findOne({ email: credentials.email });
+        console.log("Kullanıcı Bulundu:", user); // Bu çıktıyı kontrol edin.
         if (!user) {
           throw new Error("Invalid email or password");
         }
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+        console.log("Şifre Doğrulandı mı?:", isPasswordValid); // Şifre kontrolünü doğrulayın.
         if (!isPasswordValid) {
           throw new Error("Invalid email or password");
         }
 
-        console.log(user);
+        const accessToken = jwt.sign(
+          { id: user._id.toString(), email: user.email },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
 
-        return {
+        const userData = {
           id: user._id.toString(),
           email: user.email,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          position: user.position,
-          averageRating: user.average_rating
-        };
+          accessToken,
+        }
+
+        console.log("Dönen Kullanıcı:", userData); // Burayı kontrol edin.
+      
+        return userData;
       }
     })
   ],
   pages: {
     signIn: "/pages/signIn",
-   /*  error: "/auth/error"   */ 
-   signOut: "/pages/signOut"
+    signOut: "/pages/signOut"
   },
   session: {
     strategy: "jwt"
   },
   jwt: {
-    secret: process.env.JWT_SECRET
+    secret: process.env.NEXTAUTH_SECRET
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.position = user.position;
         token.accessToken = user.accessToken;
       }
       return token;
@@ -65,7 +70,6 @@ const handler =  NextAuth({
       session.user = {
         id: token.id,
         email: token.email,
-        position: token.position,
       };
       session.accessToken = token.accessToken;
       return session;

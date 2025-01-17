@@ -16,3 +16,9 @@ export async function GET() {
     const users = await Users.find();
     return NextResponse.json({users});
 }
+
+export async function DELETE(request) {
+    await connectMongoDB();
+    await Users.deleteMany();
+    return NextResponse.json({ message: "All Users Deleted" }, { status: 200 });
+}
