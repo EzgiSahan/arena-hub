@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, setError, clearError, signUpUser } from '../../../store/signUpSlice.ts';
+import { setUser, setError, clearError, signUpUser } from '../../../store/userStore/signUpSlice.ts';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';

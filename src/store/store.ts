@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import signInReducer from "./signInSlice";
-import signUpReducer from "./signUpSlice";
-import userReducer from "./fetchUserSlice";
-import matchPlayersReducer from "./fetchMatchPlayersSlice";
-import createMatchReducer from "./createMatchSlice";
-import createMatchPlayerReducer from "./createMatchPlayerSlice";
-import fetchMatchDetailsReducer from "./fetchMatchSlice";
-import createMatcPlayerByEmailReducer from "./createUserByEmail";
-import fetchPlayerRatingReducer from "./fetchPlayerRatingSlice";
+import signInReducer from "./userStore/signInSlice";
+import signUpReducer from "./userStore/signUpSlice";
+import userReducer from "./userStore/fetchUserSlice";
+import matchPlayersReducer from "./matchPlayerStore/fetchMatchPlayersSlice";
+import createMatchReducer from "./matchStore/createMatchSlice";
+import createMatchPlayerReducer from "./matchPlayerStore/createMatchPlayerSlice";
+import fetchMatchDetailsReducer from "./matchStore/fetchMatchSlice";
+import createMatcPlayerByEmailReducer from "./userStore/createUserByEmail";
+import fetchPlayerRatingReducer from "./playerRatingStore/fetchPlayerRatingSlice";
 
 export const store = configureStore({
     reducer: {
