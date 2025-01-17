@@ -20,8 +20,38 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-# Environment vars
-This project uses the following environment variables, Please create a .env file in the root of the project with the following attributes mentioned:
+## Requirements
+To run this project, you need to have the following tools installed:
+
+- [Node.js](https://nodejs.org/) (v16 or later)
+- [Git](https://git-scm.com/)
+- A MongoDB Atlas account
+
+## Installation Instructions
+
+### 1. Cloning the Repo
+
+Run the following command to clone the project files to your local computer:
+
+```bash
+git clone <repository-url>
+```
+
+Then change to the project directory:
+
+```bash
+cd <proje-dizini>
+```
+
+### 2. Installation of Required Packages
+
+To install the dependencies used in the project, run the following command:
+
+```bash
+npm install
+```
+### 3. Defining Environment Variables
+Before running the project, create a `.env` file and define the following environment variables:
 
 | Name                          | Description                         | Default Value                                  |
 | ----------------------------- | ------------------------------------| -----------------------------------------------|
@@ -30,6 +60,23 @@ This project uses the following environment variables, Please create a .env file
 |JWT_SECRET                             | The key used to create and verify a JSON Web Token (JWT).               | default-jwt-secret                                            |
 |NEXTAUTH_URL                           | Base URL for NextAuth              | `http://localhost:3000`                                            |
 
+### 4. Database Preparation
+
+Create the necessary collections and schemas on MongoDB Atlas. If there is a seed (sample data) file in the project, you can run it with the following command:
+
+```bash
+npm run seed
+```
+
+### 5. Running the Project
+
+To start the project in development mode, you can use the following command:
+
+```bash
+npm run dev
+```
+
+You can view the project by going to [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Learn More
 
