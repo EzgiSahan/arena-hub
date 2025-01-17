@@ -17,7 +17,7 @@ import SignUpContainer from '../../../components/container.js';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEmail, setPassword, setEmailError, setPasswordError } from '../../../store/signInSlice.ts';
+import { setEmail, setPassword, setEmailError, setPasswordError } from '../../../store/userStore/signInSlice.ts';
 
 export default function SignIn() {
   const dispatch = useDispatch();

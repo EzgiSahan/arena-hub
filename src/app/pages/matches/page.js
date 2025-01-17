@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMatchDetails, resetMatchState } from '../../../store/fetchMatchSlice';
+import { fetchMatchDetails, resetMatchState } from '../../../store/matchStore/fetchMatchSlice';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';

@@ -14,14 +14,14 @@ import { ExpandMore } from "@mui/icons-material";
 import PermanentDrawerLeft from "@/components/drawer.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
-import { addPlayer, resetPlayers, createMatchPlayer, setTeams, updatePlayerTeam } from "@/store/createMatchPlayerSlice";
-import { createMatch, setMatch } from "@/store/createMatchSlice";
-import { fetchUserByEmail } from "@/store/createUserByEmail";
+import { addPlayer, resetPlayers, createMatchPlayer, setTeams, updatePlayerTeam } from "@/store/matchPlayerStore/createMatchPlayerSlice";
+import { createMatch, setMatch } from "@/store/matchStore/createMatchSlice";
+import { fetchUserByEmail } from "@/store/userStore/createUserByEmail";
 import { useRouter } from "next/navigation";
-import { submitPlayerRating } from "@/store/createPlayerRatingSlice";
+import { submitPlayerRating } from "@/store/playerRatingStore/createPlayerRatingSlice";
 import SignUpContainer from "@/components/container";
 import { useState } from "react";
-import { dividePlayersIntoTeams } from "@/store/dividePlayersIntoTeamsSlice";
+import { dividePlayersIntoTeams } from "@/store/matchPlayerStore/dividePlayersIntoTeamsSlice";
 
 const CreateMatch = () => {
   const { data: session } = useSession();

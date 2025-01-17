@@ -14,13 +14,13 @@ import {
   Toolbar,
   TextField,
 } from "@mui/material";
-import { fetchMatchDetails } from "@/store/fetchMatchSlice";
-import { fetchMatchPlayer } from "@/store/fetchMatchPlayersSlice";
-import { submitPlayerRating } from "@/store/createPlayerRatingSlice";
+import { fetchMatchDetails } from "@/store/matchStore/fetchMatchSlice";
+import { fetchMatchPlayer } from "@/store/matchPlayerStore/fetchMatchPlayersSlice";
+import { submitPlayerRating } from "@/store/playerRatingStore/createPlayerRatingSlice";
 import { useSession } from "next-auth/react";
-import { fetchPlayerRatings } from "@/store/fetchPlayerRatingSlice";
+import { fetchPlayerRatings } from "@/store/playerRatingStore/fetchPlayerRatingSlice";
 import { useRouter } from "next/navigation";
-import { deleteMatch, updateMatch } from "@/store/createMatchSlice";
+import { deleteMatch, updateMatch } from "@/store/matchStore/createMatchSlice";
 import SignUpContainer from "@/components/container";
 
 const MatchDetail = () => {

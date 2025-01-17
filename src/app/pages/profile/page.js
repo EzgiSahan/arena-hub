@@ -18,7 +18,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import SignUpContainer from "../../../components/container.js";
-import { fetchUser } from "@/store/fetchUserSlice";
+import { fetchUser } from "@/store/userStore/fetchUserSlice";
 
 const Profile = () => {
   const { data: session, status } = useSession();
