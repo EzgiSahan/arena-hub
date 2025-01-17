@@ -20,6 +20,19 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+# Environment vars
+This project uses the following environment variables, Please create a .env file in the root of the project with the following attributes mentioned:
+
+| Name                          | Description                         | Default Value                                  |
+| ----------------------------- | ------------------------------------| -----------------------------------------------|
+|URL                           | Cors accepted values                | "*"                                            |
+|ACCESS_TOKEN_SECRET                           | Generate your Access token secret for your JWT Tokens               | "-"                                            |
+|REFRESH_TOKEN_SECRET                             | Generate your Refresh token secret for your JWT Tokens               | "-"                                            |
+|DB_USER                           | Database postgres username               | "postgres"                                            |
+|DB_USER_PASSWORD                           | Database postgres username                | "postgres"                                            |
+|DB_NAME                           | Name of your database               | "safeRide"                                            |
+
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
