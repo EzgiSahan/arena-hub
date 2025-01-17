@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchUserByEmail = createAsyncThunk('user/fetchUserByEmail', async (email) => {
     console.log('Fetching user with ID:', email);
-    const response = await fetch(`/api/userByEmail/${email}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/userByEmail/${email}`);
     const data = await response.json();
     console.log('API Response:', data.user._id);
     return data.user;

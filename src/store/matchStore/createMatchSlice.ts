@@ -13,7 +13,7 @@ const initialState = {
 export const createMatch = createAsyncThunk(
   'createMatchSlice/createMatch',
   async (matchData: { match_date: string; created_by: string; location: string;}) => {
-    const response = await fetch("http://localhost:3000/api/matches", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matches`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

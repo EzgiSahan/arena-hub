@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchMatchPlayer = createAsyncThunk('matchPlayer/fetchMatchPlayer', async (matchId) => {
   console.log('Fetching user with ID:', matchId);
-  const response = await fetch(`/api/matchPlayers/${matchId}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers/${matchId}`);
   const data = await response.json();
   console.log('API Response:', data);
   return data.players;

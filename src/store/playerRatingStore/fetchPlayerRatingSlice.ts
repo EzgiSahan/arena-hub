@@ -8,7 +8,7 @@ export const fetchPlayerRatings = createAsyncThunk(
   'playerRatings/fetchPlayerRatings',
   async ({ match_id }: FetchPlayerRatingsParams) => {
     console.log("match_id:", match_id);
-    const response = await fetch(`/api/playerRatings?match_id=${match_id}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/playerRatings?match_id=${match_id}`);
     const data = await response.json();
     console.log("API Response in Thunk:", data);
     return data.users;  
