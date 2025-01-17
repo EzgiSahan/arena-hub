@@ -10,17 +10,17 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // Define paths that should be accessible only to unauthenticated users
-  const publicPaths = ["/pages/signIn", "/pages/signUp"]
+  const publicPaths = ["/signIn", "/signUp"]
 
   if (session) {
     // If the user is signed in, restrict access to signIn and signUp pages
     if (publicPaths.includes(pathname)) {
-      return NextResponse.redirect(new URL("/pages/profile", req.url));
+      return NextResponse.redirect(new URL("/profile", req.url));
     }
   } else {
     // If the user is not signed in, restrict access to non-public pages
     if (!publicPaths.includes(pathname)) {
-      return NextResponse.redirect(new URL("/pages/signIn", req.url));
+      return NextResponse.redirect(new URL("/signIn", req.url));
     }
   }
 
