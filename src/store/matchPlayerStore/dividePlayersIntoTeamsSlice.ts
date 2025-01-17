@@ -9,7 +9,7 @@ export const dividePlayersIntoTeams = createAsyncThunk(
     async ({ matchId }: FetchPlayerRatingsParams) => {
       console.log(matchId);
       try {
-        const matchPlayersResponse = await fetch(`/api/matchPlayers?match_id=${matchId}`);
+        const matchPlayersResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers?match_id=${matchId}`);
         const matchPlayersData = await matchPlayersResponse.json();
         console.log("matchPlayers:", matchPlayersData);
   
@@ -69,7 +69,7 @@ export const dividePlayersIntoTeams = createAsyncThunk(
         // Takım bilgilerini API'ye kaydet
         await Promise.all(
           playerDetails.map((player) =>
-            fetch(`http://localhost:3000/api/matchPlayers/${player._id}`, {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers/${player._id}`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",

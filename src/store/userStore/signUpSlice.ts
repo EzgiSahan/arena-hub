@@ -20,7 +20,7 @@ const initialState = {
 export const signUpUser = createAsyncThunk(
   'signUpSlice/signUpUser',
   async (userData: { first_name: string; last_name: string; email: string; password: string }) => {
-    const response = await fetch("http://localhost:3000/api/register", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const submitPlayerRating = createAsyncThunk(
     "createMatchPlayerSlice/createMatchPlayer",
     async (playerRatings) => {
-      const response = await fetch("http://localhost:3000/api/playerRatings", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/playerRatings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
