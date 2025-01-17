@@ -40,7 +40,7 @@ git clone <repository-url>
 Then change to the project directory:
 
 ```bash
-cd <proje-dizini>
+cd <project-directory>
 ```
 
 ### 2. Installation of Required Packages
