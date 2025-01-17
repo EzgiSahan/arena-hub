@@ -17,7 +17,7 @@ export async function GET(request) {
     }
   
     try {
-      const ratings = await PlayerRatings.find({ rated_by_user_id: rated_by_user_id: match_id: match_id});
+      const ratings = await PlayerRatings.find({ rated_by_user_id: rated_by_user_id, match_id: match_id});
       return new Response(JSON.stringify(ratings), { status: 200 });
     } catch (error) {
       return new Response(JSON.stringify({ message: 'Error fetching ratings' }), {
