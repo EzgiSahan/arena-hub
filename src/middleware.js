@@ -5,7 +5,6 @@ export async function middleware(req) {
   const session = await getToken({ 
     req, 
     secret: process.env.NEXTAUTH_SECRET, 
-    cookieName: "next-auth.session-token" // Gerekirse özel cookie ismi ekleyin
   });
   console.log("SESSION: ", session);
   const { pathname } = req.nextUrl;
