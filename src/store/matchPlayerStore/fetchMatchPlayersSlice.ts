@@ -11,7 +11,7 @@ export const fetchMatchPlayer = createAsyncThunk(
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers?match_id=${match_id}`);
     const data = await response.json();
     console.log('API Response:', data);
-    return data.players;
+    return data.users;
 });
 
 const matchPlayerSlice = createSlice({
