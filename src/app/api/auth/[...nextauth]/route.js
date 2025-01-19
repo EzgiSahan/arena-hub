@@ -5,8 +5,7 @@ import Users from "../../../../models/users.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
-const handler =  NextAuth({
+const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -35,15 +34,11 @@ const handler =  NextAuth({
           { expiresIn: "1h" }
         );
 
-        const userData = {
+        return {
           id: user._id.toString(),
           email: user.email,
           accessToken,
-        }
-
-        console.log("Dönen Kullanıcı:", userData); // Burayı kontrol edin.
-      
-        return userData;
+        };
       }
     })
   ],
@@ -76,6 +71,7 @@ const handler =  NextAuth({
     }
   },
   secret: process.env.NEXTAUTH_SECRET
-});
+};
 
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
