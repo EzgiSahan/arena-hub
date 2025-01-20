@@ -14,7 +14,13 @@ import { ExpandMore } from "@mui/icons-material";
 import PermanentDrawerLeft from "@/components/drawer.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
-import { addPlayer, resetPlayers, createMatchPlayer, setTeams, updatePlayerTeam } from "@/store/matchPlayerStore/createMatchPlayerSlice";
+import {
+  addPlayer,
+  resetPlayers,
+  createMatchPlayer,
+  setTeams,
+  updatePlayerTeam,
+} from "@/store/matchPlayerStore/createMatchPlayerSlice";
 import { createMatch, setMatch } from "@/store/matchStore/createMatchSlice";
 import { fetchUserByEmail } from "@/store/userStore/createUserByEmail";
 import { useRouter } from "next/navigation";
@@ -22,6 +28,7 @@ import { submitPlayerRating } from "@/store/playerRatingStore/createPlayerRating
 import SignUpContainer from "@/components/container";
 import { useState } from "react";
 import { dividePlayersIntoTeams } from "@/store/matchPlayerStore/dividePlayersIntoTeamsSlice";
+import Layout from "@/components/layout";
 
 const CreateMatch = () => {
   const { data: session } = useSession();
@@ -39,7 +46,7 @@ const CreateMatch = () => {
   const validateInputs = () => {
     const match_date = document.getElementById("match_date").value;
     const location = document.getElementById("location").value;
-  
+
     if (!match_date || !location) {
       alert("Lütfen maç tarihi ve lokasyon bilgilerini doldurun.");
       return false;
@@ -49,7 +56,7 @@ const CreateMatch = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (validateInputs()) {
       const data = new FormData(event.currentTarget);
       const matchData = {
@@ -58,7 +65,7 @@ const CreateMatch = () => {
         location: data.get("location"),
         match_hour: data.get("match_hour"),
       };
-  
+
       try {
         await dispatch(setMatch(matchData));
         await dispatch(createMatch(matchData));
@@ -68,24 +75,26 @@ const CreateMatch = () => {
       }
     }
   };
-  
+
   const handlePlayerChange = async (event, position) => {
     const email = event.target.value;
-  
+
     if (!email) {
-      return; 
+      return;
     }
-  
+
     try {
       const result = await dispatch(fetchUserByEmail(email));
       if (result.payload?._id) {
-        const playerExists = players.some((player) => player.user_id === result.payload._id);
-  
+        const playerExists = players.some(
+          (player) => player.user_id === result.payload._id
+        );
+
         if (playerExists) {
           alert("Bu kullanıcı zaten eklendi.");
           return;
         }
-  
+
         const player = {
           position,
           match_id: matchId,
@@ -100,10 +109,9 @@ const CreateMatch = () => {
     }
   };
 
-
   const handlePlayerSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       await dispatch(createMatchPlayer(players));
       alert("Oyuncular başarıyla kaydedildi!");
@@ -114,7 +122,6 @@ const CreateMatch = () => {
       console.error("Oyuncular kaydedilirken hata oluştu:", error);
     }
   };
-  
 
   const positions = [
     { title: "Kaleci", count: 2 },
@@ -128,65 +135,86 @@ const CreateMatch = () => {
 
   return (
     <SignUpContainer>
-      <Box sx={{ display: "flex" }}>
-        <PermanentDrawerLeft />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Toolbar />
+      <Layout>
+        <Toolbar />
+        {/* Maç Formu */}
+        <Typography variant="h4" gutterBottom sx={{ color: "black" }}>
+          Maç Formu
+        </Typography>
+        <Box
+          component="form"
+          sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+          onSubmit={handleSubmit}
+          autoComplete="off"
+        >
+          <TextField
+            id="location"
+            name="location"
+            label="Maç Yeri"
+            variant="outlined"
+          />
+          <TextField
+            id="match_date"
+            name="match_date"
+            variant="outlined"
+            type="date"
+          />
+          <TextField
+            id="match_hour"
+            name="match_hour"
+            variant="outlined"
+            label="00:00"
+          />
+          <Button type="submit" variant="contained">
+            Maç bilgilerini kaydet
+          </Button>
+        </Box>
 
-          {/* Maç Formu */}
-          <Typography variant="h4" gutterBottom sx={{color: 'black'}}>
-            Maç Formu
-          </Typography>
-          <Box
-            component="form"
-            sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
-            onSubmit={handleSubmit}
-            autoComplete="off"
-          >
-            <TextField id="location" name="location" label="Maç Yeri" variant="outlined" />
-            <TextField id="match_date" name="match_date" variant="outlined" type="date" />
-            <TextField id="match_hour" name="match_hour" variant="outlined" label="00:00" />
-            <Button type="submit" variant="contained">
-              Maç bilgilerini kaydet
+        {/* Oyuncu Formu */}
+        {isPlayerFormActive && (
+          <Box component="form" onSubmit={handlePlayerSubmit}>
+            <Typography variant="h4" gutterBottom sx={{ color: "black" }}>
+              Oyuncu Formu
+            </Typography>
+            {positions.map((positionGroup) => (
+              <Accordion key={positionGroup.title}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  aria-controls={`${positionGroup.title}-content`}
+                  id={`${positionGroup.title}-header`}
+                >
+                  <Typography component="span" sx={{ color: "black" }}>
+                    {positionGroup.title}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Box
+                    sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+                    noValidate
+                    autoComplete="off"
+                  >
+                    {[...Array(positionGroup.count)].map((_, index) => (
+                      <TextField
+                        key={index}
+                        id={`${positionGroup.title}-${index}`}
+                        label={`${positionGroup.title} ${index + 1} email`}
+                        variant="outlined"
+                        onBlur={(e) =>
+                          handlePlayerChange(e, positionGroup.title)
+                        }
+                      />
+                    ))}
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+
+            <Button type="submit" fullWidth variant="contained">
+              Oyuncu bilgilerini kaydet
             </Button>
           </Box>
-
-          {/* Oyuncu Formu */}
-          {isPlayerFormActive && (
-            <Box component="form" onSubmit={handlePlayerSubmit}>
-              <Typography variant="h4" gutterBottom sx={{color: 'black'}}>Oyuncu Formu</Typography>
-              {positions.map((positionGroup) => (
-                <Accordion key={positionGroup.title}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMore />}
-                    aria-controls={`${positionGroup.title}-content`}
-                    id={`${positionGroup.title}-header`}
-                  >
-                    <Typography component="span" sx={{color: 'black'}}>{positionGroup.title}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Box sx={{ "& > :not(style)": { m: 1, width: "25ch" } }} noValidate autoComplete="off">
-                      {[...Array(positionGroup.count)].map((_, index) => (
-                        <TextField
-                          key={index}
-                          id={`${positionGroup.title}-${index}`}
-                          label={`${positionGroup.title} ${index + 1} email`}
-                          variant="outlined"
-                          onBlur={(e) => handlePlayerChange(e, positionGroup.title)}
-                        />
-                      ))}
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-              ))}
-
-              <Button type="submit" fullWidth variant="contained">
-                Oyuncu bilgilerini kaydet
-              </Button>
-            </Box>
-          )}
-        </Box>
-      </Box>
+        )}
+      </Layout>
     </SignUpContainer>
   );
 };

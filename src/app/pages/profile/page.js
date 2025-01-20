@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import SignUpContainer from "../../../components/container.js";
 import { fetchUser } from "@/store/userStore/fetchUserSlice";
+import Layout from "@/components/layout.js";
 
 const Profile = () => {
   const { data: session, status } = useSession();
@@ -36,40 +37,37 @@ const Profile = () => {
 
   return (
     <SignUpContainer direction="column" justifyContent="space-between">
-      <Box sx={{ display: "flex" }}>
-        <PermanentDrawerLeft />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Toolbar />
-          {fetchStatus === "loading" && (
-            <Typography>Loading user information...</Typography>
-          )}
-          {fetchStatus === "failed" && <Typography>Error: {error}</Typography>}
-          {fetchStatus === "succeeded" && user && (
-            <Box>
-              <CssBaseline enableColorScheme />
-              <Card variant="outlined">
-                <Typography
-                  component="h1"
-                  variant="h4"
-                  sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-                >
-                  Welcome, {user.first_name} {user.last_name}
-                </Typography>
-                <Divider></Divider>
-                <Typography sx={{ width: "100%", fontSize: 20 }}>
-                  Email: {user.email}
-                </Typography>
-                <Typography sx={{ width: "100%", fontSize: 20 }}>
-                  Your Average Rating: {user.average_rating}
-                </Typography>
-              </Card>
-            </Box>
-          )}
-          {status !== "authenticated" && (
-            <Typography>Please log in to view your information.</Typography>
-          )}
-        </Box>
-      </Box>
+      <Layout>
+        <Toolbar />
+        {fetchStatus === "loading" && (
+          <Typography>Loading user information...</Typography>
+        )}
+        {fetchStatus === "failed" && <Typography>Error: {error}</Typography>}
+        {fetchStatus === "succeeded" && user && (
+          <Box>
+            <CssBaseline enableColorScheme />
+            <Card variant="outlined">
+              <Typography
+                component="h1"
+                variant="h4"
+                sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+              >
+                Welcome, {user.first_name} {user.last_name}
+              </Typography>
+              <Divider></Divider>
+              <Typography sx={{ width: "100%", fontSize: 20 }}>
+                Email: {user.email}
+              </Typography>
+              <Typography sx={{ width: "100%", fontSize: 20 }}>
+                Your Average Rating: {user.average_rating}
+              </Typography>
+            </Card>
+          </Box>
+        )}
+        {status !== "authenticated" && (
+          <Typography>Please log in to view your information.</Typography>
+        )}
+      </Layout>
     </SignUpContainer>
   );
 };
