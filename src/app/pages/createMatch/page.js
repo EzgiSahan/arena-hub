@@ -47,8 +47,9 @@ const CreateMatch = () => {
   const validateInputs = () => {
     const match_date = document.getElementById("match_date").value;
     const location = document.getElementById("location").value;
+    const match_hour = document.getElementById("match_hour").value;
 
-    if (!match_date || !location) {
+    if (!match_date || !location || !match_hour) {
       alert("Lütfen maç tarihi ve lokasyon bilgilerini doldurun.");
       return false;
     }
