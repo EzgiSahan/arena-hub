@@ -37,11 +37,12 @@ const MatchDetail = () => {
     const filteredPlayers = matchPlayer?.filter((player) => player.match_id === params.id);
     const findRatedPlayers = playerRatings?.filter((player) => player.match_id === params.id && player.rated_by_user_id === session.user.id);
 
-    const team1Players = filteredPlayers?.filter((player) => player.team === 1);
-    const team2Players = filteredPlayers?.filter((player) => player.team === 2);
+    const team1Players = filteredPlayers?.filter((player) => player.team === 1) || [];
+    const team2Players = filteredPlayers?.filter((player) => player.team === 2) || [];
 
     const [ratings, setRatings] = useState({});
     const [editMode, setEditMode] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (status === "authenticated" && session?.user?.id && params.id) {
@@ -61,6 +62,7 @@ const MatchDetail = () => {
     const handleSaveRatings = (event) => {
         event.preventDefault();
         if (session?.user?.id) {
+            setLoading(true);
             const playerRating = Object.entries(ratings).map(([playerId, rating]) => ({
                 match_id: params.id,
                 rated_user_id: playerId,
@@ -68,8 +70,12 @@ const MatchDetail = () => {
                 rating,
             }));
             console.log(playerRating);
-            dispatch(submitPlayerRating(playerRating));
-            router.push('/pages/matches');
+            dispatch(submitPlayerRating(playerRating)).then(() => {
+                setLoading(false); // Kaydetme işlemi tamamlandı
+                router.push('/pages/matches');
+            }).catch(() => {
+                setLoading(false); // Hata durumunda loading'i sıfırla
+            });
         }
     };
 
@@ -324,7 +330,7 @@ const MatchDetail = () => {
                                         type="submit"
                                         disabled={Object.keys(ratings).length === 0}
                                     >
-                                        Kaydet
+                                        {loading ? "Puanlar kaydediliyor..." : "Kaydet"}
                                     </Button>
                                 )}
                             </Box>
