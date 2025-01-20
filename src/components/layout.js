@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
   const handleDrawerClose = () => setOpen(false);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <>
       <PermanentDrawerLeft open={open} onDrawerOpen={handleDrawerOpen} onDrawerClose={handleDrawerClose} />
       <Box
         component="main"
@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
       >
         {children}
       </Box>
-    </Box>
+    </>
   );
 };
 
