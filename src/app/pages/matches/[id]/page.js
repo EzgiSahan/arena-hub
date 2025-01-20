@@ -13,6 +13,7 @@ import {
   Rating,
   Toolbar,
   TextField,
+  Grid
 } from "@mui/material";
 import { fetchMatchDetails } from "@/store/matchStore/fetchMatchSlice";
 import { fetchMatchPlayer } from "@/store/matchPlayerStore/fetchMatchPlayersSlice";
@@ -22,7 +23,6 @@ import { fetchPlayerRatings } from "@/store/playerRatingStore/fetchPlayerRatingS
 import { useRouter } from "next/navigation";
 import { deleteMatch, updateMatch } from "@/store/matchStore/createMatchSlice";
 import SignUpContainer from "@/components/container";
-import Layout from "@/components/layout";
 
 const MatchDetail = () => {
     const { data: session, status } = useSession();
@@ -43,7 +43,6 @@ const MatchDetail = () => {
 
     const [ratings, setRatings] = useState({});
     const [editMode, setEditMode] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (status === "authenticated" && session?.user?.id && params.id) {
@@ -63,7 +62,6 @@ const MatchDetail = () => {
     const handleSaveRatings = (event) => {
         event.preventDefault();
         if (session?.user?.id) {
-            setLoading(true);
             const playerRating = Object.entries(ratings).map(([playerId, rating]) => ({
                 match_id: params.id,
                 rated_user_id: playerId,
@@ -71,12 +69,8 @@ const MatchDetail = () => {
                 rating,
             }));
             console.log(playerRating);
-            dispatch(submitPlayerRating(playerRating)).then(() => {
-                setLoading(false); // Kaydetme işlemi tamamlandı
-                router.push('/pages/matches');
-            }).catch(() => {
-                setLoading(false); // Hata durumunda loading'i sıfırla
-            });
+            dispatch(submitPlayerRating(playerRating));
+            router.push('/pages/matches');
         }
     };
 
@@ -114,7 +108,9 @@ const MatchDetail = () => {
 
     return (
         <SignUpContainer>
-            <Layout>
+            <Box sx={{ display: "flex" }}>
+                <PermanentDrawerLeft />
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <Toolbar />
                     {filteredMatch ? (
                         <Card sx={{ minWidth: 275 }}>
@@ -218,105 +214,114 @@ const MatchDetail = () => {
                                     <Typography variant="h6" sx={{ m: 2 }}>
                                         Takım 1
                                     </Typography>
-                                    <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
+                                    <Grid container spacing={2} sx={{ mb: 2 }}>
                                         {team1Players.map((player) => (
-                                            <Card
-                                                key={player._id}
-                                                sx={{
-                                                    flex: "1 0 18%",
-                                                    m: 1,
-                                                    maxWidth: "18%",
-                                                }}
-                                            >
-                                                <CardContent>
-                                                    <Typography variant="h5" component="div">
-                                                        {player.user_id.first_name}{" "}
-                                                        {player.user_id.last_name}
-                                                    </Typography>
-                                                    <Typography
-                                                        gutterBottom
-                                                        sx={{ color: "text.secondary", fontSize: 14 }}
-                                                    >
-                                                        Pozisyon: {player.position}
-                                                    </Typography>
-                                                    <Typography
-                                                        sx={{ color: "text.secondary", mb: 1.5 }}
-                                                    >
-                                                        Rating:{" "}
-                                                        {player.user_id.average_rating?.toFixed(1) ||
-                                                            "N/A"}
-                                                    </Typography>
-                                                    {findRatedPlayers && findRatedPlayers.length > 0 ? (
-                                                        <Rating
-                                                            name={`player-rating-${player._id}`}
-                                                            value={findRatedPlayers?.find((rating) => rating.rated_user_id === player.user_id._id)?.rating ?? 0}      
-                                                            readOnly                                                                                                 
-                                                        />
-                                                    ) : (
-                                                        <Rating
-                                                        name={`player-rating-${player._id}`}
-                                                        value={ratings[player.user_id._id] ?? 0}
-                                                        onChange={(event, newValue) => 
-                                                            handleRatingChange(player.user_id._id, newValue)
-                                                        }
-                                                    />
-                                                    )}
-                                                </CardContent>
-                                            </Card>
+                                            <Grid item xs={12} sm={6} md={4} lg={3} key={player._id}>
+                                                <Card
+                                                    sx={{
+                                                        height: "100%",
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "space-between",
+                                                    }}
+                                                >
+                                                    <CardContent>
+                                                        <Typography variant="h5" component="div">
+                                                            {player.user_id.first_name} {player.user_id.last_name}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            sx={{ color: "text.secondary", fontSize: 14 }}
+                                                        >
+                                                            Pozisyon: {player.position}
+                                                        </Typography>
+                                                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                                                            Rating:{" "}
+                                                            {player.user_id.average_rating?.toFixed(1) || "N/A"}
+                                                        </Typography>
+                                                        {findRatedPlayers && findRatedPlayers.length > 0 ? (
+                                                            <Rating
+                                                                name={`player-rating-${player._id}`}
+                                                                value={
+                                                                    findRatedPlayers?.find(
+                                                                        (rating) =>
+                                                                            rating.rated_user_id ===
+                                                                            player.user_id._id
+                                                                    )?.rating ?? 0
+                                                                }
+                                                                readOnly
+                                                            />
+                                                        ) : (
+                                                            <Rating
+                                                                name={`player-rating-${player._id}`}
+                                                                value={ratings[player.user_id._id] ?? 0}
+                                                                onChange={(event, newValue) =>
+                                                                    handleRatingChange(player.user_id._id, newValue)
+                                                                }
+                                                            />
+                                                        )}
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
                                         ))}
-                                    </Box>
+                                    </Grid>
                                 </Box>
+
                                 <Box>
                                     <Typography variant="h6" sx={{ m: 2 }}>
                                         Takım 2
                                     </Typography>
-                                    <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
+                                    <Grid container spacing={2} sx={{ mb: 2 }}>
                                         {team2Players.map((player) => (
-                                            <Card
-                                                key={player._id}
-                                                sx={{
-                                                    flex: "1 0 18%",
-                                                    m: 1,
-                                                    maxWidth: "18%",
-                                                }}
-                                            >
-                                                <CardContent>
-                                                    <Typography variant="h5" component="div">
-                                                        {player.user_id.first_name}{" "}
-                                                        {player.user_id.last_name}
-                                                    </Typography>
-                                                    <Typography
-                                                        gutterBottom
-                                                        sx={{ color: "text.secondary", fontSize: 14 }}
-                                                    >
-                                                        Pozisyon: {player.position}
-                                                    </Typography>
-                                                    <Typography
-                                                        sx={{ color: "text.secondary", mb: 1.5 }}
-                                                    >
-                                                        Rating:{" "}
-                                                        {player.user_id.average_rating?.toFixed(1) ||
-                                                            "N/A"}
-                                                    </Typography>
-                                                    {findRatedPlayers && findRatedPlayers.length > 0 ? (
-                                                        <Rating
-                                                            name={`player-rating-${player._id}`}
-                                                            value={ findRatedPlayers?.find((rating) => rating.rated_user_id === player.user_id._id)?.rating ?? 0}  
-                                                            readOnly                                                   
-                                                        />
-                                                    ) : (
-                                                        <Rating
-                                                        name={`player-rating-${player._id}`}
-                                                        value={ratings[player.user_id._id] ?? 0}
-                                                        onChange={(event, newValue) => 
-                                                            handleRatingChange(player.user_id._id, newValue)
-                                                        }
-                                                    />
-                                                    )}
-                                                </CardContent>
-                                            </Card>
+                                            <Grid item xs={12} sm={6} md={4} lg={3} key={player._id}>
+                                                <Card
+                                                    sx={{
+                                                        height: "100%",
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "space-between",
+                                                    }}
+                                                >
+                                                    <CardContent>
+                                                        <Typography variant="h5" component="div">
+                                                            {player.user_id.first_name} {player.user_id.last_name}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            sx={{ color: "text.secondary", fontSize: 14 }}
+                                                        >
+                                                            Pozisyon: {player.position}
+                                                        </Typography>
+                                                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                                                            Rating:{" "}
+                                                            {player.user_id.average_rating?.toFixed(1) || "N/A"}
+                                                        </Typography>
+                                                        {findRatedPlayers && findRatedPlayers.length > 0 ? (
+                                                            <Rating
+                                                                name={`player-rating-${player._id}`}
+                                                                value={
+                                                                    findRatedPlayers?.find(
+                                                                        (rating) =>
+                                                                            rating.rated_user_id ===
+                                                                            player.user_id._id
+                                                                    )?.rating ?? 0
+                                                                }
+                                                                readOnly
+                                                            />
+                                                        ) : (
+                                                            <Rating
+                                                                name={`player-rating-${player._id}`}
+                                                                value={ratings[player.user_id._id] ?? 0}
+                                                                onChange={(event, newValue) =>
+                                                                    handleRatingChange(player.user_id._id, newValue)
+                                                                }
+                                                            />
+                                                        )}
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
                                         ))}
-                                    </Box>
+                                    </Grid>
                                 </Box>
                                 {findRatedPlayers && findRatedPlayers.length > 0 ? ( 
                                     <Typography sx={{ mt: 2, color: "text.secondary" }}>
@@ -329,7 +334,7 @@ const MatchDetail = () => {
                                         type="submit"
                                         disabled={Object.keys(ratings).length === 0}
                                     >
-                                        {loading ? "Puanlar kaydediliyor..." : "Kaydet"}
+                                        Kaydet
                                     </Button>
                                 )}
                             </Box>
@@ -337,7 +342,8 @@ const MatchDetail = () => {
                     ) : (
                         <Typography>Maç bilgisi bulunamadı.</Typography>
                     )}
-            </Layout>
+                </Box>
+            </Box>
         </SignUpContainer>
     );
 };
