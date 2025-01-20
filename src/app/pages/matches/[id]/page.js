@@ -44,6 +44,7 @@ const MatchDetail = () => {
 
     const [ratings, setRatings] = useState({});
     const [editMode, setEditMode] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (status === "authenticated" && session?.user?.id && params.id) {
@@ -63,6 +64,7 @@ const MatchDetail = () => {
     const handleSaveRatings = (event) => {
         event.preventDefault();
         if (session?.user?.id) {
+            setLoading(true);
             const playerRating = Object.entries(ratings).map(([playerId, rating]) => ({
                 match_id: params.id,
                 rated_user_id: playerId,
@@ -70,8 +72,12 @@ const MatchDetail = () => {
                 rating,
             }));
             console.log(playerRating);
-            dispatch(submitPlayerRating(playerRating));
-            router.push('/pages/matches');
+            dispatch(submitPlayerRating(playerRating)).then(() => {
+                setLoading(false);
+                router.push('/pages/matches');
+            }).catch(() => {
+                setLoading(false); // Hata durumunda loading'i sıfırla
+            });
         }
     };
 
@@ -333,7 +339,7 @@ const MatchDetail = () => {
                                         type="submit"
                                         disabled={Object.keys(ratings).length === 0}
                                     >
-                                        Kaydet
+                                        {loading ? "Puanlar kaydediliyor..." : "Kaydet"}
                                     </Button>
                                 )}
                             </Box>
