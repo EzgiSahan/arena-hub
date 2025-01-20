@@ -83,7 +83,7 @@ const PermanentDrawerLeft = ({ open, onDrawerOpen, onDrawerClose }) => {
   const router = useRouter();
 
   return (
-    <>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -92,7 +92,7 @@ const PermanentDrawerLeft = ({ open, onDrawerOpen, onDrawerClose }) => {
             aria-label="open drawer"
             onClick={onDrawerOpen}
             edge="start"
-            sx={{ ...(open && { display: 'none' }) }}
+            sx={[{ mr: 2, }, open && { display: 'none' }]}
           >
             <MenuIcon />
           </IconButton>
@@ -158,7 +158,7 @@ const PermanentDrawerLeft = ({ open, onDrawerOpen, onDrawerClose }) => {
           </ListItem>
         </List>
       </Drawer>
-    </>
+    </Box>
   );
 };
 
