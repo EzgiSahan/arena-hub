@@ -23,6 +23,7 @@ import { fetchPlayerRatings } from "@/store/playerRatingStore/fetchPlayerRatingS
 import { useRouter } from "next/navigation";
 import { deleteMatch, updateMatch } from "@/store/matchStore/createMatchSlice";
 import SignUpContainer from "@/components/container";
+import Layout from "@/components/layout";
 
 const MatchDetail = () => {
     const { data: session, status } = useSession();
@@ -108,9 +109,7 @@ const MatchDetail = () => {
 
     return (
         <SignUpContainer>
-            <Box sx={{ display: "flex" }}>
-                <PermanentDrawerLeft />
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Layout>
                     <Toolbar />
                     {filteredMatch ? (
                         <Card sx={{ minWidth: 275 }}>
@@ -342,8 +341,7 @@ const MatchDetail = () => {
                     ) : (
                         <Typography>Maç bilgisi bulunamadı.</Typography>
                     )}
-                </Box>
-            </Box>
+            </Layout>
         </SignUpContainer>
     );
 };
