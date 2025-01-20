@@ -4,63 +4,72 @@ import PlayerRatings from "../../../models/playerRatings.js";
 import Users from "@/models/users.js";
 
 export async function POST(request) {
-    const ratings = await request.json();
-    console.log("Veritabanında ratings: ", ratings);
-    await connectMongoDB();
-  
-    const newRatings = [];
-    const duplicateRatings = [];
-  
-    for (const rating of ratings) {
+  const ratings = await request.json();
+  console.log("Veritabanında ratings: ", ratings);
+
+  await connectMongoDB();
+
+  const newRatingsPromises = ratings.map(async (rating) => {
       const { match_id, rated_user_id, rated_by_user_id } = rating;
-  
+
+      // Check if the rating already exists
       const existingRating = await PlayerRatings.findOne({
-        match_id,
-        rated_user_id,
-        rated_by_user_id,
+          match_id,
+          rated_user_id,
+          rated_by_user_id,
       });
-  
+
       if (existingRating) {
-        duplicateRatings.push({
-          message: `You have already rated player ${rated_user_id} in match ${match_id}`,
-          existingRating,
-        });
+          return {
+              duplicate: true,
+              message: `You have already rated player ${rated_user_id} in match ${match_id}`,
+              existingRating,
+          };
       }
-      else {
-        const newRatingData = { ...rating, hasRated: true };
-        const newRating = await PlayerRatings.create(newRatingData);
-        newRatings.push(newRating);
-      }
-      
-      const player = await Users.findById({ _id: rated_user_id });
+
+      // Create new rating
+      const newRatingData = { ...rating, hasRated: true };
+      const newRating = await PlayerRatings.create(newRatingData);
+
+      // Update user statistics
+      const player = await Users.findById(rated_user_id);
       if (player) {
-        const totalRating = (player.totalRating || 0) + rating.rating;
-        const matches_played = (player.matches_played || 0) + 1;
-        const average_rating = totalRating / matches_played;
-  
-        await Users.findOneAndUpdate(
-          { _id: rated_user_id },
-          { $set: { totalRating, matches_played, average_rating } }
-        );
+          const totalRating = (player.totalRating || 0) + rating.rating;
+          const matches_played = (player.matches_played || 0) + 1;
+          const average_rating = totalRating / matches_played;
+
+          await Users.findOneAndUpdate(
+              { _id: rated_user_id },
+              { totalRating, matches_played, average_rating }
+          );
       }
-    }
-  
-    if (duplicateRatings.length > 0) {
+
+      return { duplicate: false, newRating };
+  });
+
+  // Execute all operations concurrently
+  const results = await Promise.all(newRatingsPromises);
+
+  const newRatings = results.filter(result => !result.duplicate).map(result => result.newRating);
+  const duplicateRatings = results.filter(result => result.duplicate);
+
+  if (duplicateRatings.length > 0) {
       return NextResponse.json(
-        {
-          message: "Some ratings were already submitted.",
-          newRatings,
-          duplicateRatings,
-        },
-        { status: 200 }
+          {
+              message: "Some ratings were already submitted.",
+              newRatings,
+              duplicateRatings,
+          },
+          { status: 200 }
       );
-    }
-  
-    return NextResponse.json(
+  }
+
+  return NextResponse.json(
       { message: "Ratings Added", ratings: newRatings },
       { status: 201 }
-    );
-  }
+  );
+}
+
   
 
   export async function GET(request) {
