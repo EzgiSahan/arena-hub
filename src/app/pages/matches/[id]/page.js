@@ -46,7 +46,7 @@ const MatchDetail = () => {
     useEffect(() => {
         if (status === "authenticated" && session?.user?.id && params.id) {
             dispatch(fetchMatchDetails(session.user.id));
-            dispatch(fetchMatchPlayer({match_id: params.id}));
+            dispatch(fetchMatchPlayer(params.id));
             dispatch(fetchPlayerRatings({ match_id: params.id }));
         }
     }, [status, dispatch, session?.user?.id, params.id]);
