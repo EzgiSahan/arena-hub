@@ -36,6 +36,7 @@ const CreateMatch = () => {
   const router = useRouter();
 
   const [isPlayerFormActive, setIsPlayerFormActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const date = useSelector((state) => state.createMatch.date);
   const location = useSelector((state) => state.createMatch.location);
@@ -68,8 +69,8 @@ const CreateMatch = () => {
 
       try {
         await dispatch(setMatch(matchData));
-        await dispatch(createMatch(matchData));
         setIsPlayerFormActive(true); // Oyuncu formunu aktif hale getir
+        await dispatch(createMatch(matchData));
       } catch (error) {
         console.error("Maç bilgileri kaydedilirken hata oluştu:", error);
       }
@@ -112,14 +113,18 @@ const CreateMatch = () => {
   const handlePlayerSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      await dispatch(createMatchPlayer(players));
-      alert("Oyuncular başarıyla kaydedildi!");
-      dispatch(dividePlayersIntoTeams({ matchId: matchId }));
-      dispatch(resetPlayers());
-      router.push(`/pages/matches`);
+    setIsLoading(true);
+     try {
+      await dispatch(createMatchPlayer(players)).then(() => {
+        dispatch(dividePlayersIntoTeams({ matchId: matchId })).then(() => {
+          dispatch(resetPlayers());
+          setIsLoading(false); 
+          router.push(`/pages/matches`);
+        });
+      });
     } catch (error) {
       console.error("Oyuncular kaydedilirken hata oluştu:", error);
+      setIsLoading(false); 
     }
   };
 
@@ -210,7 +215,7 @@ const CreateMatch = () => {
             ))}
 
             <Button type="submit" fullWidth variant="contained">
-              Oyuncu bilgilerini kaydet
+              {isLoading ? "Maç oluşturuluyor..." : "Oyuncu bilgilerini kaydet"}            
             </Button>
           </Box>
         )}
