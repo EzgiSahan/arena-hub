@@ -1,17 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-interface FetchPlayerRatingsParams {
-  match_id: string; // or number
-}
-
 export const fetchMatchPlayer = createAsyncThunk(
   'matchPlayer/fetchMatchPlayer', 
-  async ({ match_id }: FetchPlayerRatingsParams) => {
+  async (match_id) => {
     console.log('Fetching user with ID:', match_id);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers?match_id=${match_id}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matchPlayers/${match_id}`);
     const data = await response.json();
     console.log('API Response:', data);
-    return data.users;
+    return data.players;
 });
 
 const matchPlayerSlice = createSlice({
