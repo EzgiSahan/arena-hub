@@ -104,24 +104,6 @@ const CreateMatch = () => {
   const handlePlayerSubmit = async (event) => {
     event.preventDefault();
   
-    const isAllFieldsFilled = players.every(
-      (player) => player.position && player.match_id && player.user_id
-    );
-  
-    const duplicateEmails = players.some((player, index, self) =>
-      self.findIndex((p) => p.user_id === player.user_id) !== index
-    );
-  
-    if (!isAllFieldsFilled) {
-      alert("Lütfen tüm oyuncu alanlarını eksiksiz doldurduğunuzdan emin olun.");
-      return;
-    }
-  
-    if (duplicateEmails) {
-      alert("Her kullanıcıyı yalnızca bir kez ekleyebilirsiniz.");
-      return;
-    }
-  
     try {
       await dispatch(createMatchPlayer(players));
       alert("Oyuncular başarıyla kaydedildi!");
