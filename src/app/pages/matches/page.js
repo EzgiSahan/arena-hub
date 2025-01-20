@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import PermanentDrawerLeft from '@/components/drawer.js';
+import React, { useEffect } from "react";
+import PermanentDrawerLeft from "@/components/drawer.js";
 import {
   Box,
   Toolbar,
@@ -14,15 +14,19 @@ import {
   ListItemButton,
   CssBaseline,
   Divider,
-} from '@mui/material';
-import { useSession } from 'next-auth/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchMatchDetails, resetMatchState } from '../../../store/matchStore/fetchMatchSlice';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import Link from 'next/link';
-import SignUpContainer from '@/components/container';
+} from "@mui/material";
+import { useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchMatchDetails,
+  resetMatchState,
+} from "../../../store/matchStore/fetchMatchSlice";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import Link from "next/link";
+import SignUpContainer from "@/components/container";
+import Layout from "@/components/layout";
 
 const Matches = () => {
   const { data: session, status } = useSession();
@@ -33,57 +37,71 @@ const Matches = () => {
   const error = useSelector((state) => state.matches.error);
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.id) {
+    if (status === "authenticated" && session?.user?.id) {
       dispatch(fetchMatchDetails(session.user.id));
     }
   }, [status, dispatch, session]);
 
   return (
     <SignUpContainer>
-      <Box sx={{ display: 'flex' }}>
-      <PermanentDrawerLeft />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Layout>
         <Toolbar />
-        <Typography variant="h4" gutterBottom sx={{color: 'black'}}>
+        <Typography variant="h4" gutterBottom sx={{ color: "black" }}>
           Kayıtlı Olduğunuz Maçlar
         </Typography>
 
-        {fetchStatus === 'loading' && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        {fetchStatus === "loading" && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "50vh",
+            }}
+          >
             <CircularProgress />
           </Box>
         )}
 
-        {fetchStatus === 'failed' && (
+        {fetchStatus === "failed" && (
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
           </Alert>
         )}
 
-        {fetchStatus === 'succeeded' && matches && (
-          <List sx={{bgcolor: 'background.paper' }}>
+        {fetchStatus === "succeeded" && matches && (
+          <List sx={{ bgcolor: "background.paper" }}>
             {matches.map((match) => (
-                <ListItem key={match._id}>
-                  <Divider></Divider>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <SportsSoccerIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText sx={{color: 'black'}} primary={match.match_id.location} secondary={new Date(match.match_id.match_date).toLocaleDateString()}/>
-                  <Link href={`/pages/matches/${match.match_id._id}`} style={{color: 'black'}}>Details</Link>
-                </ListItem>
+              <ListItem key={match._id}>
+                <Divider></Divider>
+                <ListItemAvatar>
+                  <Avatar>
+                    <SportsSoccerIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{ color: "black" }}
+                  primary={match.match_id.location}
+                  secondary={new Date(
+                    match.match_id.match_date
+                  ).toLocaleDateString()}
+                />
+                <Link
+                  href={`/pages/matches/${match.match_id._id}`}
+                  style={{ color: "black" }}
+                >
+                  Details
+                </Link>
+              </ListItem>
             ))}
           </List>
         )}
-
-        {fetchStatus === 'succeeded' && matches.length === 0 && (
-          <Typography variant="body1" sx={{ mt: 2, color: 'black' }}>
+        {fetchStatus === "succeeded" && matches.length === 0 && (
+          <Typography variant="body1" sx={{ mt: 2, color: "black" }}>
             Henüz kayıtlı olduğunuz bir maç bulunmamaktadır.
           </Typography>
         )}
-      </Box>
-    </Box>
+      </Layout>
     </SignUpContainer>
   );
 };
