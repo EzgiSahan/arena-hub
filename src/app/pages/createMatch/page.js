@@ -113,21 +113,46 @@ const CreateMatch = () => {
 
   const handlePlayerSubmit = async (event) => {
     event.preventDefault();
-
+  
+    // Tüm oyuncu alanlarının doldurulup doldurulmadığını kontrol et
+    const emptyFields = positions.some((positionGroup) => {
+      return [...Array(positionGroup.count)].some((_, index) => {
+        const inputElement = document.getElementById(
+          `${positionGroup.title}-${index}`
+        );
+        return !inputElement || !inputElement.value; // Eğer boş alan varsa true döner
+      });
+    });
+  
+    if (emptyFields) {
+      alert("Lütfen tüm oyuncu e-posta alanlarını doldurun.");
+      return;
+    }
+  
+    // Eklenmiş oyuncular arasında tekrarlayan kullanıcı olup olmadığını kontrol et
+    const uniquePlayerIds = new Set(players.map((player) => player.user_id));
+    if (uniquePlayerIds.size !== players.length) {
+      alert("Aynı kullanıcı birden fazla kez eklenemez.");
+      return;
+    }
+  
     setIsLoading(true);
-     try {
+  
+    try {
+      // Oyuncu bilgilerini kaydet ve takımları oluştur
       await dispatch(createMatchPlayer(players)).then(() => {
         dispatch(dividePlayersIntoTeams({ matchId: matchId })).then(() => {
           dispatch(resetPlayers());
-          setIsLoading(false); 
+          setIsLoading(false);
           router.push(`/pages/matches`);
         });
       });
     } catch (error) {
       console.error("Oyuncular kaydedilirken hata oluştu:", error);
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
+  
 
   const positions = [
     { title: "Kaleci", count: 2 },
