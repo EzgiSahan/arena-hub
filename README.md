@@ -1,4 +1,11 @@
+
+## Arena Hub
+
+This project is designed to organize football matches, create balanced teams, and evaluate players' performances. Users can create matches, join other matches, and rate players after the matches to generate statistics!
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+This project is also developed using the Material-UI library. Material-UI is a React component library that provides modern and stylish interface elements following Google's Material Design guidelines. You can utilize Material-UI components to give your project an aesthetic and user-friendly appearance.
 
 ## Getting Started
 
