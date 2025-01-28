@@ -1,7 +1,9 @@
 
-## Arena Hub
+# Arena Hub
 
 This project is designed to organize football matches, create balanced teams, and evaluate players' performances. Users can create matches, join other matches, and rate players after the matches to generate statistics!
+
+## About the Project
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
